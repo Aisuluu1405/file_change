@@ -6,6 +6,7 @@ from django.views.generic import DetailView, UpdateView
 from django.contrib.auth.models import User
 
 from accounts.models import Profile
+from webapp.models import File
 from .forms import UserCreationForm, UserChangeForm, PasswordChangeForm
 
 
@@ -35,11 +36,11 @@ class UserDetailView(DetailView):
     template_name = 'user_detail.html'
     context_object_name = 'user_obj'
 
-   # def get_context_data(self, **kwargs):
-    #    context = super().get_context_data()
-     #   user = User.objects.get(pk=self.kwargs['pk'])
-      #  context['adverts'] = Advert.objects.filter(author=user.pk)
-       # return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        user = User.objects.get(pk=self.kwargs['pk'])
+        context['files'] = File.objects.filter(author=user.pk).order_by('-create')
+        return context
 
 
 

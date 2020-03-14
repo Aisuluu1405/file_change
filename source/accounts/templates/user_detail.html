@@ -13,7 +13,7 @@
 {% block content %}
     <div class="lk-content">
         <h1 class="text-center m-4">Личный кабинет</h1>
-        <div class="row" style="background-color: lightgray;">
+        <div class="row" style="background-color: steelblue;">
             <div class="cl" style="width: 25%">
                 <div class="mt-4">
                     {% if user_obj.profile.avatar %}
@@ -23,7 +23,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="cl" style="width: 45%; margin-top: 30px;">
+            <div class="cl" style="width: 70%; margin-top: 30px; margin-bottom: 50px;">
                 <div class="mt-5">
                     <p><b>Логин:</b> {{ user_obj.username }}</p>
                     <p><b>Имя:</b> {{ user_obj.first_name }}</p>
@@ -42,13 +42,14 @@
 {#                        </div>#}
 {#                        {% endfor %}#}
 {#                    {% endif %}#}
-                 <h2 class="my_ad m-5 text-center" style="font-weight: bold">Мои объявления: </h2>
-            <div class="advert-list">
-                {% for advert in adverts %}
-                    {% include 'partial/advert_list.html' %}
-                {% empty %}
-                    <p class="ad_note text-center mb-4" style="font-weight: bold; color: crimson; font-size: 25px;">У Вас еще нет объявлений!</p>
-                {% endfor %}
+
+                 <h2 class="my_ad mt-5 text-left" style="font-weight: bold">Мои файлы: </h2>
+            <div class="file-list">
+{#                {% if files %}#}
+                    {% include 'partial/file_list.html' %}
+{#                {% empty %}#}
+{#                    <p class="ad_note text-center mb-4" style="font-weight: bold; color: crimson; font-size: 25px;">У Вас еще нет скачанных файлов!</p>#}
+{#                {% endfor %}#}
             </div>
                     </div>
                 </div>
