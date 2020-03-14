@@ -44,10 +44,68 @@
         </div>
     </div>
 </div>
+    <p><input type="text" style="width: 260px; margin-left: 6%; margin-top: 50px;" id="search_name" placeholder="Введите 'username' пользователя"></p>
+    <p><button type="submit" class="btn btn-primary" id='user_search' style="margin-left: 12%; margin-top: 30px;"><i class="fas fa-search"></i>   Найти</button></p>
 
-    <input type="text" style="width: 260px; margin-left: 70px; margin-top: 50px;" id="search_name" placeholder="Введите 'username' пользователя">
-     <div id="search_results"></div>
-     <button type="submit" class="btn btn-primary" style="margin-left: 12%; margin-top: 30px;"><i class="fas fa-search"></i>   Найти</button>
+        <h2>Приватные пользователи:</h2>
+<div class='user-container'>
+{#        {% for obj in result %}#}
+    <div class="row ml-5">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                <tr class="table-dark text-dark">
+                    <th scope="col">ID</th>
+                    <th scope="col">Пользователь</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-secondary">
+                    <td class="user_text">{{obj.id}}</td>
+                    <td>{{obj.username}}</td>
+                    <td><button class="btn btn-primary">Добавить в "Приват"</button></td>
+                    <td><button class="btn btn-danger">Удалить из "Привата"</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{#        {% endfor %}#}
+    </div>
+{% endblock %}
 
-        <h2>Приват:</h2>
+
+{% block scripts %}
+    <script>
+        $("#user_search").click(function(){
+            let user_info = $(this).context.innerText;
+            $('.user_text').val(user_info);
+        })
+        //        $('#search_name').keyup(function () {
+ //            $.ajax({
+ //                type: 'GET',
+ //                url: '/accounts/user/ajax/search/',
+ //                data: {
+ //                    q: $('input[id=search_name]').val()
+ //                },
+ //                success: searchSuccess});
+ //            function searchSuccess(data, textStatus, jqXHR)
+ //                {
+ //                    $('#search_results').html(data)
+ //                }
+ //        });
+ //         $("#id_in_first_name").click(function(){
+ //            let search = $("#id_in_first_name:checkbox:checked").length > 0;
+ //            if(search == true){
+ //                console.log($('#search_name'))
+ //                $('#search_name').show()}
+ //            else{
+ //                $('#search_name').hide()}
+ //         });
+ //         $('#id_text').val('').change();
+ //         $('#id_').removeAttr("checked")
+
+    </script>
 {% endblock %}
