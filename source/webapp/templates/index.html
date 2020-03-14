@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Files{% endblock %}
+
+{% block menu %}
+    <li class="nav-item"><a href="{% url 'webapp:file__add' %}" class="nav-link">Добавить файл</a></li>
+
+{% endblock %}
+
+{% block content %}
+{#    {% include 'partial/simple_search.html' %}#}
+        {% if is_paginated %}
+            {% include 'partial/pagination.html' %}
+        {% endif %}
+{#    {% if request.user.is_authenticated %}#}
+{#        <a href="{% url 'webapp:file__add' %}" class="btn btn-primary  ml-5 mt-3">Добавить файл</a>#}
+{#    {% endif %}#}
+
+{#    <div class="type text-left mt-2">#}
+        <h1>Файлы</h1>
+    {% include 'partial/file_list.html' %}
+{#    </div>#}
+
+{% endblock %}

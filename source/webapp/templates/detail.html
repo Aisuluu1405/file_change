@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Детальный просмотр{% endblock %}
+
+{% block content %}
+        <h1>Детальный просмотр файла</h1>
+
+<div class="container_index pt-4 ">
+            <div class="row ml-5">
+                <div class="col-12">
+                    <table class="table">
+                        <thead>
+                        <tr class="table-dark text-dark">
+                            <th scope="col">ID</th>
+                            <th scope="col">Название</th>
+                            <th scope="col">Автор</th>
+                            <th scope="col">Дата загрузки</th>
+                            <th scope="col">Ссылка</th>
+                            {% if request.user.is_authenticated %}
+                                <th scope="col"></th>
+                            {% endif %}
+                        </tr>
+                        </thead>
+                            <tbody>
+                            <tr class="table-secondary">
+                                <td>{{ file.id}}</td>
+                                <td>{{file.name}}</td>
+                                {%  if file.author %}
+                                <td><a href="{% url 'accounts:user_detail' file.author.pk %}" class="text-danger font-weight-bold"> {{ file.author }} </a></td>
+                                {% else %}
+                                <td>Аноним</td>
+                                {% endif %}
+                                <td>{{ file.create| date:'d.m.Y H:i:s'  }}</td>
+                                <td><a href="{{ file.file.url }}">{{ file.file }}</a></td>
+                                {% if request.user.is_authenticated %}
+                                <td>
+                                    <p><a href="{% url 'webapp:file_delete' file.pk %}"><i class="fas fa-trash-alt ml-5"></i></a>
+                                       <a href="{% url 'webapp:file_update' file.pk %}"><i class="fas fa-edit ml-5" ></i></a></p>
+                                </td>
+                                {% endif %}
+                            </tr>
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+{% endblock %}
