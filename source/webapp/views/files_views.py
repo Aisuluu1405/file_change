@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.utils.http import urlencode
-from webapp.forms import FileForm, SimpleSearchForm
+from webapp.forms import FileForm, SimpleSearchForm, CommonFileForm
 from webapp.models import File
 
 
@@ -24,6 +24,7 @@ class IndexView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(). get_context_data(object_list=object_list, **kwargs)
         context['form'] = self.form
+        context['common'] = File.objects.filter(access='common')
         if self.search_value:
             context['query'] = urlencode({'search': self.search_value})
         return context
@@ -53,7 +54,13 @@ class FileDetailView(DetailView):
 class FileCreateView(CreateView):
     template_name = 'add.html'
     model = File
-    form_class = FileForm
+
+    def get_form_class(self):
+        if self.request.user.is_anonymous:
+            self.form_class = CommonFileForm
+        else:
+            self.form_class = FileForm
+        return self.form_class
 
     def form_valid(self, form):
         self.object = form.save(commit=False)

@@ -39,9 +39,9 @@ class UserDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         user = User.objects.get(pk=self.kwargs['pk'])
-        context['files'] = File.objects.filter(author=user.pk).order_by('-create')
+        context['author_files'] = File.objects.filter(author=user.pk).order_by('-create')
+        context['files'] = File.objects.filter(access='common').order_by('-create')
         return context
-
 
 
 class UserPersonalInfoChangeView(UserPassesTestMixin, UpdateView):
