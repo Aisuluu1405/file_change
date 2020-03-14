@@ -1,0 +1,58 @@
+﻿{% extends 'base.html' %}
+{% load staticfiles %}
+{% block title %}Пользователь{% endblock %}
+
+{% block menu %}
+{#    прячем ссылки, видеть будеть только владелец страницы#}
+    {% if user.pk == user_obj.pk %}
+        <li class="nav-item"><a href="{% url 'accounts:user_update' user_obj.pk %}" class="nav-link">Редактировать</a></li>
+        <li class="nav-item"><a href="{% url 'accounts:password_change' user_obj.pk %}" class="nav-link">Изменить пароль</a></li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <div class="lk-content">
+        <h1 class="text-center m-4">Личный кабинет</h1>
+        <div class="row" style="background-color: lightgray;">
+            <div class="cl" style="width: 25%">
+                <div class="mt-4">
+                    {% if user_obj.profile.avatar %}
+                        <img src="{{ user_obj.profile.avatar.url }}" class="user_photo">
+                    {% else %}
+                         <img src="{% static "default-avatar.jpg" %}" class="user_photo" style="width: 70%;" alt="No avatar!" />
+                    {% endif %}
+                </div>
+            </div>
+            <div class="cl" style="width: 45%; margin-top: 30px;">
+                <div class="mt-5">
+                    <p><b>Логин:</b> {{ user_obj.username }}</p>
+                    <p><b>Имя:</b> {{ user_obj.first_name }}</p>
+                    <p><b>Фамилия:</b> {{ user_obj.last_name }}</p>
+                    <p><b>День рождения:</b> {{ user_obj.profile.birth_date }}</p>
+                    <p><b>Телефон:</b> {{ user_obj.profile.phone}}</p>
+                    {% if user_obj.email %}
+                    <p><b>Почта:</b> {{ user_obj.email }}</p>
+                    {% endif %}
+{#                     {% if request.user == user_obj %}#}
+{#                        <h2>Избранное</h2>#}
+{#                        <div class="row">#}
+{#                        {% for favorite in user_obj.favorites.all %}#}
+{#                            <div class="col col-12 col-md-6 col-lg-4 col-xl-3">#}
+{#                            {% include "partial/advert_list.html" with advert=favorite.advert %}#}
+{#                        </div>#}
+{#                        {% endfor %}#}
+{#                    {% endif %}#}
+                 <h2 class="my_ad m-5 text-center" style="font-weight: bold">Мои объявления: </h2>
+            <div class="advert-list">
+                {% for advert in adverts %}
+                    {% include 'partial/advert_list.html' %}
+                {% empty %}
+                    <p class="ad_note text-center mb-4" style="font-weight: bold; color: crimson; font-size: 25px;">У Вас еще нет объявлений!</p>
+                {% endfor %}
+            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
