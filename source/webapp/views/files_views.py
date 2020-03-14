@@ -1,10 +1,10 @@
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.db.models import Q
 from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.utils.http import urlencode
-from webapp.forms import FileForm, SimpleSearchForm, CommonFileForm
+from webapp.forms import FileForm, SimpleSearchForm, CommonFileForm, SearchUserForm
 from webapp.models import File
 
 
@@ -15,6 +15,7 @@ class IndexView(ListView):
     ordering = ['-create']
     paginate_by = 10
     paginate_orphans = 1
+
 
     def get(self, request, *args, **kwargs):
         self.form = self.get_search_form()
@@ -49,6 +50,11 @@ class FileDetailView(DetailView):
     template_name = 'detail.html'
     model = File
     context_object_name = 'file'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = SearchUserForm()
+        return context
 
 
 class FileCreateView(CreateView):

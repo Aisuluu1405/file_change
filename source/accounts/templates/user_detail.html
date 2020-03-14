@@ -14,7 +14,7 @@
         <h1 class="text-center m-4">Личный кабинет</h1>
         <div class="row" style="background-color: steelblue;">
             <div class="cl" style="width: 25%">
-                <div class="mt-4">
+                <div class="mt-2">
                     {% if user_obj.profile.avatar %}
                         <img src="{{ user_obj.profile.avatar.url }}" class="user_photo">
                     {% else %}
@@ -22,7 +22,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div class="cl" style="width: 70%; margin-top: 30px; margin-bottom: 50px;">
+            <div class="cl" style="width:70%; margin-top: 30px; margin-bottom: 70px;">
                 <div class="mt-5">
                     <p><b>Логин:</b> {{ user_obj.username }}</p>
                     <p><b>Имя:</b> {{ user_obj.first_name }}</p>
@@ -32,19 +32,18 @@
                     {% if user_obj.email %}
                     <p><b>Почта:</b> {{ user_obj.email }}</p>
                     {% endif %}
-                 <h2 class="my_ad mt-5 text-left" style="font-weight: bold">Мои файлы: </h2>
-            <div class="file-list">
-                {% if not files %}
-                    <p class="note mb-4" style="font-weight: bold; color: crimson; font-size: 25px;">У Вас еще нет скачанных файлов!</p>
-                {% elif user_obj == request.user%}
-                    {% include 'partial/file_list.html' with files=author_files  %}
-                {% else %}
-                    {% include 'partial/file_list.html' %}
-                {% endif %}
-            </div>
                     </div>
                 </div>
             </div>
+     <h2 class="my_ad mt-5 text-center" style="font-weight: bold">Мои файлы: </h2>
+            <div class="file-list">
+                {% if not files %}
+                    <p class="note mb-4 text-center" style="font-weight: bold; color: crimson; font-size: 25px;">У Вас еще нет скачанных файлов!</p>
+                {% elif user_obj == request.user%}
+                    {% include 'partial/file_list.html' with files=author_files%}
+                {% else %}
+                    {% include 'partial/file_list.html'%}
+                {% endif %}
         </div>
     </div>
 {% endblock %}

@@ -4,7 +4,6 @@ from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.generic import DetailView, UpdateView
 from django.contrib.auth.models import User
-
 from accounts.models import Profile
 from webapp.models import File
 from .forms import UserCreationForm, UserChangeForm, PasswordChangeForm
@@ -39,8 +38,8 @@ class UserDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         user = User.objects.get(pk=self.kwargs['pk'])
-        context['author_files'] = File.objects.filter(author=user.pk).order_by('-create')
-        context['files'] = File.objects.filter(access='common').order_by('-create')
+        context['author_files'] = File.objects.filter(author=user.pk)
+        context['files'] = File.objects.filter(access='common', author=user.pk)
         return context
 
 

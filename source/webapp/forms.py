@@ -16,3 +16,7 @@ class CommonFileForm(forms.ModelForm):
     class Meta:
         model=File
         exclude=['access']
+
+
+class SearchUserForm(forms.Form):
+    user_search = forms.CharField(max_length=150,label='Поиск пользователя')

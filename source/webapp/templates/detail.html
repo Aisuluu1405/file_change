@@ -4,47 +4,50 @@
 
 {% block content %}
         <h1>Детальный просмотр файла</h1>
-
 <div class="container_index pt-4 ">
-            <div class="row ml-5">
-                <div class="col-12">
-                    <table class="table">
-                        <thead>
-                        <tr class="table-dark text-dark">
-                            <th scope="col">ID</th>
-                            <th scope="col">Название</th>
-                            <th scope="col">Автор</th>
-                            <th scope="col">Дата загрузки</th>
-                            <th scope="col">Ссылка</th>
-                            {% if request.user.is_authenticated %}
-                                <th scope="col"></th>
-                            {% endif %}
-                        </tr>
-                        </thead>
-                            <tbody>
-                            <tr class="table-secondary">
-                                <td>{{ file.id}}</td>
-                                <td>{{file.name}}</td>
-                                {%  if file.author %}
-                                <td><a href="{% url 'accounts:user_detail' file.author.pk %}" class="text-danger font-weight-bold"> {{ file.author }} </a></td>
-                                {% else %}
-                                <td>Аноним</td>
-                                {% endif %}
-                                <td>{{ file.create| date:'d.m.Y H:i:s'  }}</td>
-                                <td><a href="{{ file.file.url }}">{{ file.file }}</a></td>
-                                <td>
-                                {% if request.user == file.author or perms.webapp.change_file %}
-                                    <p><a href="{% url 'webapp:file_delete' file.pk %}"><i class="fas fa-trash-alt ml-5"></i></a>
-                                {%  endif %}
-                                {% if request.user == file.author or perms.webapp.delete_file %}
-                                       <a href="{% url 'webapp:file_update' file.pk %}"><i class="fas fa-edit ml-5" ></i></a></p>
-                                {% endif %}
-                                </td>
-                             </tr>
-                            </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="row ml-5">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                <tr class="table-dark text-dark">
+                    <th scope="col">ID</th>
+                    <th scope="col">Название</th>
+                    <th scope="col">Автор</th>
+                    <th scope="col">Дата загрузки</th>
+                    <th scope="col">Общий доступ</th>
+                    <th scope="col">Ссылка</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr class="table-secondary">
+                    <td>{{ file.id}}</td>
+                    <td>{{file.name}}</td>
+                    {% if file.author %}
+                        <td><a href="{% url 'accounts:user_detail' file.author.pk %}" class="text-danger font-weight-bold"> {{ file.author }} </a></td>                   {% else %}
+                        <td>Аноним</td>
+                    {% endif %}
+                        <td>{{ file.create| date:'d.m.Y H:i:s'  }}</td>
+                        <td><a href="{{ file.file.url }}">{{ file.file }}</a></td>
+                        <td>{{ file.access }}</td>
+                        <td>
+                    {% if request.user == file.author or perms.webapp.change_file %}
+                         <p><a href="{% url 'webapp:file_delete' file.pk %}"><i class="fas fa-trash-alt ml-5"></i></a>
+                    {%  endif %}
+                    {% if request.user == file.author or perms.webapp.delete_file %}
+                         <a href="{% url 'webapp:file_update' file.pk %}"><i class="fas fa-edit ml-5" ></i></a></p>
+                    {% endif %}
+                        </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
+    </div>
+</div>
 
+    <input type="text" style="width: 260px; margin-left: 70px; margin-top: 50px;" id="search_name" placeholder="Введите 'username' пользователя">
+     <div id="search_results"></div>
+     <button type="submit" class="btn btn-primary" style="margin-left: 12%; margin-top: 30px;"><i class="fas fa-search"></i>   Найти</button>
+
+        <h2>Приват:</h2>
 {% endblock %}
