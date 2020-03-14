@@ -4,10 +4,10 @@
 
 {% block menu %}
 {#    прячем ссылки, видеть будеть только владелец страницы#}
-    {% if user.pk == user_obj.pk %}
+{#    {% if user.pk == user_obj.pk %}#}
         <li class="nav-item"><a href="{% url 'accounts:user_update' user_obj.pk %}" class="nav-link">Редактировать</a></li>
         <li class="nav-item"><a href="{% url 'accounts:password_change' user_obj.pk %}" class="nav-link">Изменить пароль</a></li>
-    {% endif %}
+{#    {% endif %}#}
 {% endblock %}
 
 {% block content %}
@@ -33,22 +33,14 @@
                     {% if user_obj.email %}
                     <p><b>Почта:</b> {{ user_obj.email }}</p>
                     {% endif %}
-{#                     {% if request.user == user_obj %}#}
-{#                        <h2>Избранное</h2>#}
-{#                        <div class="row">#}
-{#                        {% for favorite in user_obj.favorites.all %}#}
-{#                            <div class="col col-12 col-md-6 col-lg-4 col-xl-3">#}
-{#                            {% include "partial/advert_list.html" with advert=favorite.advert %}#}
-{#                        </div>#}
-{#                        {% endfor %}#}
-{#                    {% endif %}#}
-
                  <h2 class="my_ad mt-5 text-left" style="font-weight: bold">Мои файлы: </h2>
             <div class="file-list">
-{#                {% if files %}#}
+                {% if not files %}
+                    <p class="note mb-4" style="font-weight: bold; color: crimson; font-size: 25px;">У Вас еще нет скачанных файлов!</p>
+                {% else %}
                     {% include 'partial/file_list.html' %}
-{#                {% empty %}#}
-{#                    <p class="ad_note text-center mb-4" style="font-weight: bold; color: crimson; font-size: 25px;">У Вас еще нет скачанных файлов!</p>#}
+                {% endif %}
+
 {#                {% endfor %}#}
             </div>
                     </div>
