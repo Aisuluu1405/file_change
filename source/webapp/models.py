@@ -6,6 +6,7 @@ ACCESS_CHOICES = (
     ('hidden', 'Скрытый'),
     ('privat', 'Приватный'),
 )
+
 class File(models.Model):
 
     file = models.FileField(upload_to='file_to', verbose_name='Файл')
@@ -20,10 +21,24 @@ class File(models.Model):
     access = models.CharField(max_length=50, choices=ACCESS_CHOICES, default=ACCESS_CHOICES[0][0],
                                 verbose_name='Категория')
 
-
     def __str__(self):
         return self.name
 
     class Meta:
         verbose_name = 'Файл'
         verbose_name_plural = 'Файлы'
+
+
+class Private(models.Model):
+    file = models.ForeignKey('File', on_delete=models.CASCADE, related_name='private_by')
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE, related_name='privates')
+
+    def __str__(self):
+        return 'Пользователь' + self.user.get_full_name()
+
+    class Meta:
+        verbose_name = 'Приват'
+        verbose_name_plural = 'Приват'
+
+
+
