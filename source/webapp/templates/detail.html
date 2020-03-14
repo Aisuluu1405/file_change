@@ -32,13 +32,15 @@
                                 {% endif %}
                                 <td>{{ file.create| date:'d.m.Y H:i:s'  }}</td>
                                 <td><a href="{{ file.file.url }}">{{ file.file }}</a></td>
-                                {% if request.user.is_authenticated %}
                                 <td>
+                                {% if request.user == file.author or perms.webapp.change_file %}
                                     <p><a href="{% url 'webapp:file_delete' file.pk %}"><i class="fas fa-trash-alt ml-5"></i></a>
+                                {%  endif %}
+                                {% if request.user == file.author or perms.webapp.delete_file %}
                                        <a href="{% url 'webapp:file_update' file.pk %}"><i class="fas fa-edit ml-5" ></i></a></p>
-                                </td>
                                 {% endif %}
-                            </tr>
+                                </td>
+                             </tr>
                             </tbody>
                     </table>
                 </div>
