@@ -5,7 +5,7 @@ from webapp.models import File
 class FileForm(forms.ModelForm):
     class Meta:
         model=File
-        exclude = ['create']
+        exclude = ['create', 'author']
 
 
 class SimpleSearchForm(forms.Form):

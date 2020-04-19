@@ -14,8 +14,8 @@
                     <th scope="col">Название</th>
                     <th scope="col">Автор</th>
                     <th scope="col">Дата загрузки</th>
-                    <th scope="col">Общий доступ</th>
                     <th scope="col">Ссылка</th>
+                    <th scope="col">Общий доступ</th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
@@ -44,68 +44,39 @@
         </div>
     </div>
 </div>
-    <p><input type="text" style="width: 260px; margin-left: 6%; margin-top: 50px;" id="search_name" placeholder="Введите 'username' пользователя"></p>
-    <p><button type="submit" class="btn btn-primary" id='user_search' style="margin-left: 12%; margin-top: 30px;"><i class="fas fa-search"></i>   Найти</button></p>
 
-        <h2>Приватные пользователи:</h2>
+        <h3>Приватные пользователи:</h3>
 <div class='user-container'>
-{#        {% for obj in result %}#}
     <div class="row ml-5">
         <div class="col-12">
             <table class="table">
                 <thead>
+                {% if request.user == file.author %}
                 <tr class="table-dark text-dark">
-                    <th scope="col">ID</th>
                     <th scope="col">Пользователь</th>
-                    <th scope="col"></th>
-                    <th scope="col"></th>
+                    <th scope="col">Действие</th>
+                    <th scope="col" style="width: 20%">Сообщение</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="table_{{ user.pk }}">
                 <tr class="table-secondary">
-                    <td class="user_text">{{obj.id}}</td>
-                    <td>{{obj.username}}</td>
-                    <td><button class="btn btn-primary">Добавить в "Приват"</button></td>
-                    <td><button class="btn btn-danger">Удалить из "Привата"</button></td>
+                    <td><input type="text" id="user_name_{{ user.pk }}" class="form-control"></td>
+                  <td><button class="btn btn-primary" onclick="addToPrivate(event, {{ user.pk }})">Добавить</button></td>
+                  <td id="answer"></td>
                 </tr>
                 </tbody>
+                {% for user in file.private_by.all %}
+                  <tbody>
+                  <tr id="private_user_{{user.pk }}" class="table-secondary">
+                      <td><a href="{% url 'accounts:user_detail' user.pk %}">{{ user.user }}</a> </td>
+                      <td><button class="btn btn-danger" onclick="deletePrivateUser(event, {{ file.id }}, {{ user.pk }})">Удалить</button></td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+              {% endfor %}
             </table>
+                {% endif %}
         </div>
     </div>
-{#        {% endfor %}#}
-    </div>
-{% endblock %}
-
-
-{% block scripts %}
-    <script>
-        $("#user_search").click(function(){
-            let user_info = $(this).context.innerText;
-            $('.user_text').val(user_info);
-        })
-        //        $('#search_name').keyup(function () {
- //            $.ajax({
- //                type: 'GET',
- //                url: '/accounts/user/ajax/search/',
- //                data: {
- //                    q: $('input[id=search_name]').val()
- //                },
- //                success: searchSuccess});
- //            function searchSuccess(data, textStatus, jqXHR)
- //                {
- //                    $('#search_results').html(data)
- //                }
- //        });
- //         $("#id_in_first_name").click(function(){
- //            let search = $("#id_in_first_name:checkbox:checked").length > 0;
- //            if(search == true){
- //                console.log($('#search_name'))
- //                $('#search_name').show()}
- //            else{
- //                $('#search_name').hide()}
- //         });
- //         $('#id_text').val('').change();
- //         $('#id_').removeAttr("checked")
-
-    </script>
+</div>
 {% endblock %}

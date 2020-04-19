@@ -12,13 +12,13 @@
                     <th scope="col">Ссылка</th>
                 </tr>
                 </thead>
-                {% for file in files|dictsortreversed:'create' %}
+                {% for file in files%}
                     <tbody>
                     <tr class="table-secondary">
                         <td scope="row">{{ forloop.counter }}</td>
                         <td><a href="{% url 'webapp:file_detail' file.pk %}"> {{file.name}}</a></td>
                         {%  if file.author %}
-                            <td><a href="{% url 'accounts:user_detail' file.author.pk %}" class="text-danger font-weight-bold"> {{ file.author }} </a></td>
+                            <td><a href="{% url 'accounts:user_detail' file.author.pk %}" class="text-primary font-weight-bold"> {{ file.author }} </a></td>
                         {% else %}
                             <td>Аноним</td>
                         {% endif %}

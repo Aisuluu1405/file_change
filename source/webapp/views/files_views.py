@@ -16,7 +16,6 @@ class IndexView(ListView):
     paginate_by = 10
     paginate_orphans = 1
 
-
     def get(self, request, *args, **kwargs):
         self.form = self.get_search_form()
         self.search_value = self.get_search_value()
@@ -25,16 +24,19 @@ class IndexView(ListView):
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(). get_context_data(object_list=object_list, **kwargs)
         context['form'] = self.form
-        context['common'] = File.objects.filter(access='common')
+        # context['common'] = File.objects.filter(access='common')
         if self.search_value:
             context['query'] = urlencode({'search': self.search_value})
         return context
 
+
     def get_queryset(self):
         queryset = super().get_queryset()
         if self.search_value:
-            query = Q(name__icontains=self.search_value)
-            queryset=queryset.filter(query)
+            query = Q(name__icontains=self.search_value) & Q(access='common')
+            queryset = queryset.filter(query)
+        else:
+            queryset = queryset.filter(access='common')
         return queryset
 
     def get_search_form(self):
@@ -46,7 +48,7 @@ class IndexView(ListView):
         return None
 
 
-class FileDetailView(DetailView):
+class FileDetailView(UserPassesTestMixin, DetailView):
     template_name = 'detail.html'
     model = File
     context_object_name = 'file'
@@ -55,6 +57,10 @@ class FileDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['form'] = SearchUserForm()
         return context
+
+    def test_func(self):
+        file = self.get_object()
+        return self.request.user == file.author or self.request.user in file.private.all()
 
 
 class FileCreateView(CreateView):
@@ -82,7 +88,7 @@ class FileCreateView(CreateView):
 class FileUpdateView(UserPassesTestMixin, UpdateView):
     template_name = 'update.html'
     model = File
-    fields = ('name', 'access')
+    fields = ('name', 'file', 'access')
     context_object_name = 'file'
 
     def test_func(self):

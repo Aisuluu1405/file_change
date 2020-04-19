@@ -1,46 +1,32 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
 from django.views import View
-from django.views.generic import TemplateView
-
 from webapp.models import Private, File
 
 
-class AddToPrivates(LoginRequiredMixin, View):
+class PrivateUserAdd(View):
 
-    def post(self, request, *args, **kwargs):
-        user = request.user
-        file = get_object_or_404(File, pk=request.POST.get('pk'))
-        Private.objects.get_or_create(user=user, file=file)
-        return JsonResponse({'pk': file.pk})
+    def post(self, request):
+        file = File.objects.get(pk = int(request.POST['file']))
+        user = request.POST['user_name']
+        try:
+            user_obj = User.objects.get(username=user)
+            file_exists = Private.objects.get_or_create(file=file, user=user_obj)
+            if file_exists[1] == False:
+                return JsonResponse({'answer': 'Пользователь уже существует!'})
+            else:
+                return JsonResponse({'answer': 'Пользователь успешно добавлен!', 'user' : user_obj.username, 'user_id' : user_obj.id, 'file_id': file.pk})
+        except User.DoesNotExist as e:
+            print(e)
+            return JsonResponse({'answer':'Нет такого пользователя'})
 
 
-class DeleteFromPrivates(LoginRequiredMixin, View):
-    permission_required = "webapp.delete_favorite"
+class PrivateUserDelete(View):
 
-    def post(self, request, *args, **kwargs):
-        user = request.user
-        file = get_object_or_404(File, pk=request.POST.get('pk'))
+    def post(self, request):
+        file = File.objects.get(pk=int(request.POST['file_id']))
+        user = User.objects.get(id=int(request.POST['user_id']))
         Private.objects.filter(file=file, user=user).delete()
-        return JsonResponse({'pk': file.pk})
+        return JsonResponse({'status': '200'})
 
-#
-# class SearchUser(TemplateView):
-#     template_name = "user-search.html"
-#
-#
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         result_list = []
-#         q = self.request.GET.get('q', None)
-#         if q:
-#             result_list = [user for user in User.objects.filter(
-#                 Q(username__icontains=q))]
-#             context = {
-#                 "result": result_list,
-#                 "query": q,
-#             }
-#         return context
+
